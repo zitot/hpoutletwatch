@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HP Outlet Scanner</title>
+	<style type="text/css">
+body {
+  padding: 2em;
+}
+
+ul {
+  margin-left: 1.3em;
+}
+
+#hidden {display:none}
+
+	</style>
+	<script type="text/javascript">
+// escaped: \\ \^ \$ \* \+ \? \. \( \) \| \{ \} \[ \]
+// in JavaScript /  is used to open and close the 
+// regexp: /...pattern.../, so we should escape it too.
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+		// test = /<table.*class="pps-table".*?>.*?<\/table>/i.test(xhr.responseText);
+		console.log("xhr:");
+		console.log(xhr.responseText);
+		let tbl = (xhr.responseText.match(/<table.*class="pps-table".*?>.*?<\/table>/i))[0];console.log("tbl:");
+		console.log(tbl);
+		let newElem = document.createElement("div");
+		newElem.innerHTML = tbl;
+		let b = document.querySelector("body");
+		b.appendChild(newElem);
+		function_name()
+    }
+}
+
+xhr.open('GET', 'https://h41369.www4.hp.com/pps-offers.php?prod_cat=desktops', true);
+xhr.send(null);
+
+
+function insertionSort(inputArr)
+{
+	let length = inputArr.length;
+	for (let i = 1; i < length; i++) {
+        let key = inputArr[i];
+        let j = i - 1;
+        while (j >= 0 && inputArr[j][0] > key[0]) {
+            inputArr[j + 1] = inputArr[j];
+            j = j - 1;
+        }
+        inputArr[j + 1] = key;
+    }
+    return inputArr;
+}
+
+function function_name() {
+	let parent = document.querySelector('body');
+	let table = document.querySelector('table.pps-table');
+	let rows = table.rows;
+	let prices = [];
+	for (let i = rows.length - 1; i >= 1; i--) {
+		// Cell3's inner text may be '$%d%d..', '$', or ''
+		let Cell3 = parseInt(rows[i].cells[3].innerHTML.substring(1), 10);
+		if (!Cell3)
+			prices[i-1] = [parseInt(rows[i].cells[2].innerHTML.substring(1), 10), i];
+		else
+			prices[i-1] = [Cell3, i];
+	}
+	insertionSort(prices);
+	let ftable = document.createElement('table');
+	let ftbody = document.createElement('tbody');
+	ftable.appendChild(ftbody);
+	let ftr = rows[0].cloneNode(true); // top row headish
+	ftr.className = "pps-header";
+	for (let i = 0; i <= prices.length - 1; i++) {
+		let r = prices[i][1]; // index of the row in rows to clone
+		let node = rows[r].cloneNode(true);
+		node.className = "data";
+		ftbody.appendChild(node);
+	}
+	let fragment = document.createDocumentFragment();
+	fragment.appendChild(ftable);
+	parent.appendChild(fragment);
+	table.remove();
+	// Styling
+	ftable.setAttribute("width", "100%");
+	ftable.setAttribute("border", "0");
+	ftable.setAttribute("cellspacing", "1");
+	ftable.setAttribute("width", "100%");
+	ftable.setAttribute("class", "pps-table");
+}
+	</script>
+<!-- 	<script type="text/javascript">
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+        alert(xhr.responseText);
+        let findBody = /<body class="left-to-right">.*<\/body>/si.test(xhr.responseText)
+        // document.querySelector("div#hidden").innerHTML = 
+        // 	/<body[^>]*>([\s\S]+)<\/body>/i(xhr.responseText)[1];
+    }
+}
+
+
+xhr.open('GET', 'https://h41369.www4.hp.com/pps-offers.php?prod_cat=desktops', true);
+xhr.send(null);
+	</script>
+ --></head>
+<body>
+	<h1>Fetch Example</h1>
+	<ul id="latest"></ul>
+	<div id="hidden"></div>
+</body>
+</html>
