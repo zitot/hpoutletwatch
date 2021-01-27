@@ -19,6 +19,10 @@ ul {
 // in JavaScript /  is used to open and close the 
 // regexp: /...pattern.../, so we should escape it too.
 var xhr = new XMLHttpRequest();
+		
+const proxyurl = "https://cors-anywhere.herokuapp.com/";
+const url = "https://h41369.www4.hp.com/pps-offers.php?prod_cat=monitors"
+
 xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
 		// test = /<table.*class="pps-table".*?>.*?<\/table>/i.test(xhr.responseText);
@@ -34,7 +38,8 @@ xhr.onreadystatechange = function() {
     }
 }
 
-xhr.open('GET', 'https://h41369.www4.hp.com/pps-offers.php?prod_cat=desktops', true);
+//xhr.open('GET', 'https://h41369.www4.hp.com/pps-offers.php?prod_cat=desktops', true);
+xhr.open('GET', proxyurl + url, true);
 xhr.send(null);
 
 
